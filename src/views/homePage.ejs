@@ -48,9 +48,12 @@
             <% for(let i=0; i < dataUser.length; i++) { %>
                 <tr>
                     <th scope="row">
-                        <%= dataUser[i].id %>
+                        <%= i + 1 %>
                     </th>
-                    <td scope="row">
+                    <td hidden>
+                        <%= dataUser[i].id %>
+                    </td>
+                    <td>
                         <%= dataUser[i].firstName + dataUser[i].lastName %>
                     </td>
                     <td>
@@ -72,15 +75,10 @@
                         <%= dataUser[i].positionId %>
                     </td>
                     <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="location.href='/Update/<%= dataUser[i].id %>'">Edit</button>
-                            <button type="button" class="btn btn-secondary"
-                                onclick="location.href='/deleteUser/<%= dataUser[i].id %>'">Delete</button>
-                        </div>
-                        <!-- <button type="button" onclick="location.href='/Detail/<%= dataUser[i].id %>'">Detail</button>
-                        <button type="button" onclick="location.href='/Update/<%= dataUser[i].id %>'">Edit</button>
-                        <button type="button" onclick="location.href='/Delete/<%= dataUser[i].id %>'">Delete</button> -->
+                        <button type="button" class="btn btn-warning"
+                            onclick="location.href='/updateUserPage/<%= dataUser[i].id %>'">Edit</button>
+                        <button type="button" class="btn btn-danger"
+                            onclick="location.href='/deleteUser/<%= dataUser[i].id %>'">Delete</button>
                     </td>
                 </tr>
                 <% } %>

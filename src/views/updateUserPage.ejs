@@ -23,51 +23,52 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="/">Home</a>
+        <a class="nav-item nav-link active" href="/">Home</a>
         <a class="nav-item nav-link" href="/CreateUserPage">Create New User</a>
-        <a class="nav-item nav-link active" href="#">Pricing</a>
+        <a class="nav-item nav-link" href="#">Pricing</a>
         <a class="nav-item nav-link disabled" href="#">Disabled</a>
       </div>
     </div>
   </nav>
-  <form class="row g-3 mt-0 m-3 pt-0 p-3" action="/CreateUser" method="post">
+  <form class="row g-3 mt-0 m-3 pt-0 p-3" action="/updateUser" method="post">
+    <input type="text" class="form-control" name="id" value="<%= dataUser.id %>" hidden>
     <div class="col-md-6">
       <label for="firstName" class="form-label">First Name</label>
-      <input type="text" class="form-control" name="firstName">
+      <input type="text" class="form-control" name="firstName" value="<%= dataUser.firstName %>">
     </div>
     <div class="col-md-6">
       <label for="lastName" class="form-label">Last Name</label>
-      <input type="text" class="form-control" name="lastName">
+      <input type="text" class="form-control" name="lastName" value="<%= dataUser.lastName %>">
     </div>
     <div class="col-md-6">
       <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" name="email">
+      <input type="email" class="form-control" name="email" value="<%= dataUser.email %>">
     </div>
     <div class="col-md-6">
       <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" name="password">
+      <input type="password" class="form-control" name="password" value="<%= dataUser.password %>" readonly>
     </div>
     <div class="col-12">
       <label for="address" class="form-label">Address</label>
-      <input type="text" class="form-control" name="address" placeholder="1234 Main St">
+      <input type="text" class="form-control" name="address" placeholder="1234 Main St" value="<%= dataUser.address %>">
     </div>
     <div class="col-md-6">
       <label for="phoneNumber" class="form-label">Phone Number</label>
-      <input type="text" class="form-control" name="phoneNumber">
+      <input type="text" class="form-control" name="phoneNumber" value="<%= dataUser.phoneNumber %>">
     </div>
     <div class="col-md-3">
       <label for="sex" class="form-label">State</label>
       <select name="sex" class="form-select">
-        <option selected value="F">Female</option>
-        <option value="M">Male</option>
+        <option value="F" <%=dataUser.gender=="F" ? 'selected' : '' %>>Female</option>
+        <option value="M" <%=dataUser.gender=="M" ? 'selected' : '' %>>Male</option>
       </select>
     </div>
     <div class="col-md-3">
       <label for="positionId" class="form-label">State</label>
       <select name="positionId" class="form-select">
-        <option selected value="R1">R1</option>
-        <option value="R2">R2</option>
-        <option value="R3">R3</option>
+        <option value="R1" <%=dataUser.positionId=="R1" ? 'selected' : '' %>>R1</option>
+        <option value="R2" <%=dataUser.positionId=="R2" ? 'selected' : '' %>>R2</option>
+        <option value="R3" <%=dataUser.positionId=="R3" ? 'selected' : '' %>>R3</option>
       </select>
     </div>
     <div class="col-12">

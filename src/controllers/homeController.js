@@ -49,7 +49,7 @@ let updateUserPage = async (req, res) => {
   // let { userName, passWord, userDecs } = req.body;
   // await connection.execute("UPDATE users SET user_decs = ?, Password = ? WHERE user_name = ?", [userDecs, passWord, userName]);
   try {
-    await homeService.updateUserPage(req.params);
+    const rows = await homeService.getDetailUser(req.params);
     return res.render("updateUserPage.ejs", { dataUser: rows });
   } catch (error) {
     console.log(error);

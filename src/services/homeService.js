@@ -14,6 +14,21 @@ let getUser = () => {
   });
 };
 
+let getDetailUser = (req) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.User.findOne({
+        where: {
+          id: req.id,
+        },
+      });
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 let createUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -54,11 +69,11 @@ let deleteUser = (data) => {
 let updateUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let passWordHash = bcrypt.hashSync(data.password, salt);
+      // let passWordHash = bcrypt.hashSync(data.password, salt);
       await db.User.update(
         {
           email: data.email,
-          password: passWordHash,
+          // password: passWordHash,
           firstName: data.firstName,
           lastName: data.lastName,
           address: data.address,
@@ -84,4 +99,5 @@ export default {
   createUser,
   deleteUser,
   updateUser,
+  getDetailUser,
 };
