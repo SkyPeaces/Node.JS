@@ -5,3 +5,6 @@ command line
 git add .
 git commit -m "first commit" 
 git push --set-upstream origin main
+git pull
+git fetch
+git merch
