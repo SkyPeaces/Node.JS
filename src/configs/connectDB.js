@@ -31,13 +31,22 @@
 
 // export default connection;
 const { Sequelize } = require("sequelize");
+require("dotenv").config();
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../configs/config.json")[env];
 
 // Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize("node.js", "root", null, {
-  host: "localhost",
-  dialect: "mysql",
-  logging: false,
-});
+let sequelize
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+// const sequelize = new Sequelize("khaxqjrl_root", "khaxqjrl_hoant", "", {
+//   host: "103.97.126.21",
+//   dialect: "mysql",
+//   logging: false,
+// });
 
 let connectDB = async () => {
   try {

@@ -1,24 +1,26 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "node.js",
-    "host": "127.0.0.1",
+    "username": "khaxqjrl_hoant",
+    "password": "Abc@12345",
+    "database": "khaxqjrl_root",
+    "host": "103.97.126.21",
     "dialect": "mysql",
-    "logging":false
+    "logging": false
   },
   "test": {
     "username": "root",
     "password": null,
     "database": "node.js",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "production": {
     "username": "root",
     "password": null,
     "database": "node.js",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   }
 }
