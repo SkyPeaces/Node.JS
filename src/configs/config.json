@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "khaxqjrl_hoant",
+    "username": "khaxqjrl_user",
     "password": "Abc@12345",
-    "database": "khaxqjrl_root",
+    "database": "khaxqjrl_db",
     "host": "103.97.126.21",
     "dialect": "mysql",
     "logging": false

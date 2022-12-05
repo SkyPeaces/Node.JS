@@ -1,88 +1,46 @@
-import homeService from "../services/homeService";
-
-let getHomePage = async (req, res) => {
-  // const [rows, fields] = await connection.execute("SELECT * FROM `users`");
-  try {
-    let data = await homeService.getUser();
-    // console.log(data);
-    return res.render("homePage.ejs", { dataUser: data });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-let getDetailPage = async (req, res) => {
-  const [rows, fields] = await connection.execute("SELECT * FROM `users` WHERE id = ?", [req.params.UserId]);
-  return res.render("update.ejs", { dataUser: rows });
-  // return res.send('hello detail page')
-};
-
-let createUserPage = (req, res) => {
-  return res.render("CreateUserPage.ejs");
-};
-
-let createUser = async (req, res) => {
-  // const [rows, fields] = await connection.execute("SELECT max(id) as id FROM `users`");
-  // let id = rows[0].id + 1;
-  // let { userName, userDecs, passWord } = req.body;
-  // await connection.execute("INSERT INTO users(id, user_name, user_decs, password) values (?, ?, ?, ?)", [id, userName, userDecs, passWord]);
-  try {
-    await homeService.createUser(req.body);
-    return res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-let updateUser = async (req, res) => {
-  // let { userName, passWord, userDecs } = req.body;
-  // await connection.execute("UPDATE users SET user_decs = ?, Password = ? WHERE user_name = ?", [userDecs, passWord, userName]);
-  try {
-    await homeService.updateUser(req.body);
-    return res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-let updateUserPage = async (req, res) => {
-  // let { userName, passWord, userDecs } = req.body;
-  // await connection.execute("UPDATE users SET user_decs = ?, Password = ? WHERE user_name = ?", [userDecs, passWord, userName]);
-  try {
-    const rows = await homeService.getDetailUser(req.params);
-    return res.render("updateUserPage.ejs", { dataUser: rows });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-let deleteUser = async (req, res) => {
-  // await connection.execute("DELETE FROM `users` WHERE id = ?", [req.params.UserId]);
-  try {
-    await homeService.deleteUser(req.params);
-    return res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
-};
+import userService from "../services/userService";
 
 let handleLogin = async (req, res) => {
-  let { userName, password } = req.body;
-  try {
-    return res.status(200).json({
-      userName: this.userName,
-      password: this.password,
+  let { email, password } = req.body;
+  // console.log(`email: ${email}, password: ${password}`);
+  if (!email || !password) {
+    return res.status(500).json({
+      errCode: "03",
+      errMsg: `Email address or Password is not input`,
     });
-  } catch (error) {}
+  }
+  try {
+    let results = await userService.handleLogin(req.body);
+    return res.status(results.service).json({
+      errCode: results.errCode,
+      errMsg: results.errMsg,
+      user: results.user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      errCode: constants.errCodeException,
+      errMsg: `${constants.errMsgException} ${error}`,
+    });
+  }
+};
+
+let getUserById = async (req, res) => {
+  try {
+    let results = await userService.getUserById(req.body.id);
+    return res.status(results.service).json({
+      errCode: results.errCode,
+      errMsg: results.errMsg,
+      user: results.user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      errCode: constants.errCodeException,
+      errMsg: `${constants.errMsgException} ${error}`,
+    });
+  }
 };
 
 export default {
-  getHomePage,
-  getDetailPage,
-  createUser,
-  updateUser,
-  deleteUser,
-  createUserPage,
-  updateUserPage,
   handleLogin,
+  getUserById,
 };

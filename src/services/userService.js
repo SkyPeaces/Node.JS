@@ -1,107 +1,88 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import constants from "../configs/constants";
 
-let salt = bcrypt.genSaltSync(10);
-
-let getUser = () => {
+let handleLogin = (user) => {
   return new Promise(async (resolve, reject) => {
+    // console.log(`email: ${user.email}, password: ${user.password}`);
+    let results = {};
     try {
-      let data = await db.User.findAll();
-      resolve(data);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-let getDetailUser = (req) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let data = await db.User.findOne({
+      let userDB = await db.User.findOne({
         where: {
-          id: req.id,
+          email: user.email,
         },
+        raw: true,
       });
-      resolve(data);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-let createUser = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let passWordHash = bcrypt.hashSync(data.password, salt);
-      await db.User.create({
-        email: data.email,
-        password: passWordHash,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        address: data.address,
-        gender: data.sex,
-        roleId: data.roleId,
-        phoneNumber: data.phoneNumber,
-        positionId: data.positionId,
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-let deleteUser = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      await db.User.destroy({
-        where: {
-          id: data.id,
-        },
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-let updateUser = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // let passWordHash = bcrypt.hashSync(data.password, salt);
-      await db.User.update(
-        {
-          email: data.email,
-          // password: passWordHash,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          address: data.address,
-          gender: data.sex,
-          roleId: data.roleId,
-          phoneNumber: data.phoneNumber,
-          positionId: data.positionId,
-        },
-        {
-          where: {
-            id: data.id,
-          },
+      console.log(`userDB: ${userDB.password}`);
+      if (userDB) {
+        let check = await bcrypt.compareSync(user.password, userDB.password);
+        if (check) {
+          results.service = constants.serviceSuccess;
+          results.errCode = constants.errCodeSuccess;
+          results.errMsg = constants.errMsgSuccess;
+          delete userDB.password;
+          results.user = userDB;
+        } else {
+          results.service = constants.serviceFail;
+          results.errCode = "02";
+          results.errMsg = "Wrong email address or password";
         }
-      );
-      resolve();
+      } else {
+        results.service = constants.serviceFail;
+        results.errCode = "02";
+        results.errMsg = "Email address or password is not found";
+      }
     } catch (error) {
-      reject(error);
+      results.errCode = constants.errCodeException;
+      results.errMsg = `${constants.errMsgException} ${error}`;
     }
+    resolve(results);
   });
 };
 
-let handleLogin = () => {};
+let getUserById = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    let results = {};
+    if (userId) {
+      console.log(`id1: ${userId}`);
+      try {
+        let userDB = await db.User.findOne({
+          // attributes: { exclude: ["password"] },
+          where: {
+            id: userId,
+          },
+          raw: true,
+        });
+        console.log(`user: ${userDB}`);
+        results.service = constants.serviceSuccess;
+        results.errCode = constants.errCodeSuccess;
+        results.errMsg = constants.errMsgSuccess;
+        results.user = userDB ? userDB : {};
+      } catch (error) {
+        results.errCode = constants.errCodeException;
+        results.errMsg = `${constants.errMsgException} ${error}`;
+      }
+    } else {
+      console.log(`id2: ${userId}`);
+      try {
+        let userDB = await db.User.findAll({
+          attributes: { exclude: ["password"] },
+          raw: true,
+        });
+        results.service = constants.serviceSuccess;
+        results.errCode = constants.errCodeSuccess;
+        results.errMsg = constants.errMsgSuccess;
+        results.user = userDB ? userDB : {};
+      } catch (error) {
+        results.errCode = constants.errCodeException;
+        results.errMsg = `${constants.errMsgException} ${error}`;
+      }
+    }
+    resolve(results);
+  });
+};
 
 export default {
-  getUser,
-  createUser,
-  deleteUser,
-  updateUser,
-  getDetailUser,
   handleLogin,
+  getUserById,
 };

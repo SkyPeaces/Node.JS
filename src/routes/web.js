@@ -13,6 +13,7 @@ const initWebRoute = (app) => {
   router.get("/deleteUser/:id", homeController.deleteUser);
 
   router.post("/api/login", userController.handleLogin);
+  router.get("/api/getUser/:id", userController.getUserById);
 
   return app.use("/", router);
 };
