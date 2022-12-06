@@ -13,7 +13,6 @@ let handleLogin = (user) => {
         },
         raw: true,
       });
-      console.log(`userDB: ${userDB.password}`);
       if (userDB) {
         let check = await bcrypt.compareSync(user.password, userDB.password);
         if (check) {
@@ -43,27 +42,25 @@ let handleLogin = (user) => {
 let getUserById = (userId) => {
   return new Promise(async (resolve, reject) => {
     let results = {};
-    if (userId) {
-      console.log(`id1: ${userId}`);
+    if (userId !== "undefined") {
       try {
         let userDB = await db.User.findOne({
-          // attributes: { exclude: ["password"] },
+          attributes: { exclude: ["password"] },
           where: {
             id: userId,
           },
           raw: true,
         });
-        console.log(`user: ${userDB}`);
         results.service = constants.serviceSuccess;
         results.errCode = constants.errCodeSuccess;
         results.errMsg = constants.errMsgSuccess;
         results.user = userDB ? userDB : {};
       } catch (error) {
+        results.service = constants.serviceFail;
         results.errCode = constants.errCodeException;
         results.errMsg = `${constants.errMsgException} ${error}`;
       }
     } else {
-      console.log(`id2: ${userId}`);
       try {
         let userDB = await db.User.findAll({
           attributes: { exclude: ["password"] },
@@ -74,6 +71,7 @@ let getUserById = (userId) => {
         results.errMsg = constants.errMsgSuccess;
         results.user = userDB ? userDB : {};
       } catch (error) {
+        results.service = constants.serviceFail;
         results.errCode = constants.errCodeException;
         results.errMsg = `${constants.errMsgException} ${error}`;
       }
@@ -82,7 +80,36 @@ let getUserById = (userId) => {
   });
 };
 
+let delUserById = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    let results = {};
+    if (userId) {
+      try {
+        await db.User.destroy({
+          where: {
+            id: userId,
+          },
+          raw: true,
+        });
+        results.service = constants.serviceSuccess;
+        results.errCode = constants.errCodeSuccess;
+        results.errMsg = constants.errMsgSuccess;
+      } catch (error) {
+        results.service = constants.serviceFail;
+        results.errCode = constants.errCodeException;
+        results.errMsg = `${constants.errMsgException} ${error}`;
+      }
+    } else {
+      results.service = constants.serviceFail;
+      results.errCode = constants.errCodeException;
+      results.errMsg = `${constants.errMsgException} ${error}`;
+    }
+    resolve(results);
+  });
+};
+
 export default {
   handleLogin,
   getUserById,
+  delUserById,
 };
