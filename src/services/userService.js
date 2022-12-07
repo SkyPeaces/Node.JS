@@ -2,6 +2,8 @@ import db from "../models/index";
 import bcrypt from "bcryptjs";
 import constants from "../configs/constants";
 
+let salt = bcrypt.genSaltSync(10);
+
 let handleLogin = (user) => {
   return new Promise(async (resolve, reject) => {
     // console.log(`email: ${user.email}, password: ${user.password}`);
@@ -42,7 +44,8 @@ let handleLogin = (user) => {
 let getUserById = (userId) => {
   return new Promise(async (resolve, reject) => {
     let results = {};
-    if (userId !== "undefined") {
+    if (userId && userId !== "undefined") {
+      console.log("userId: ", userId);
       try {
         let userDB = await db.User.findOne({
           attributes: { exclude: ["password"] },
@@ -108,8 +111,59 @@ let delUserById = (userId) => {
   });
 };
 
+let updateUser = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await db.User.update(
+        {
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          gender: data.sex,
+          roleId: data.roleId,
+          phoneNumber: data.phoneNumber,
+          positionId: data.positionId,
+        },
+        {
+          where: {
+            id: data.id,
+          },
+        }
+      );
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let createUser = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let passWordHash = bcrypt.hashSync(data.password, salt);
+      await db.User.create({
+        email: data.email,
+        password: passWordHash,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        gender: data.sex,
+        roleId: data.roleId,
+        phoneNumber: data.phoneNumber,
+        positionId: data.positionId,
+      });
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export default {
   handleLogin,
   getUserById,
   delUserById,
+  updateUser,
+  createUser,
 };

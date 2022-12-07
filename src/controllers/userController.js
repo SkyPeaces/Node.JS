@@ -26,9 +26,9 @@ let handleLogin = async (req, res) => {
 };
 
 let getUserById = async (req, res) => {
-  let userId = req.params.id;
+  let { id } = req.query;
   try {
-    let results = await userService.getUserById(userId);
+    let results = await userService.getUserById(id);
     return res.status(results.service).json({
       errCode: results.errCode,
       errMsg: results.errMsg,
@@ -43,11 +43,47 @@ let getUserById = async (req, res) => {
 };
 
 let delUserById = async (req, res) => {
+  let { id } = req.query;
   try {
-    let results = await userService.delUserById(userId);
+    let results = await userService.delUserById(id);
     return res.status(results.service).json({
       errCode: results.errCode,
       errMsg: results.errMsg,
+    });
+  } catch (error) {
+    return res.status(constants.serviceFail).json({
+      errCode: constants.errCodeException,
+      errMsg: `${constants.errMsgException} ${error}`,
+    });
+  }
+};
+
+let createUser = async (req, res) => {
+  console.log("req.body: ", req.body);
+  let { user } = req.body;
+  try {
+    let results = await userService.createUser(user);
+    return res.status(results.service).json({
+      errCode: results.errCode,
+      errMsg: results.errMsg,
+    });
+  } catch (error) {
+    return res.status(constants.serviceFail).json({
+      errCode: constants.errCodeException,
+      errMsg: `${constants.errMsgException} ${error}`,
+    });
+  }
+};
+
+let updateUser = async (req, res) => {
+  console.log("req.body: ", req.body);
+  let { user } = req.body;
+  try {
+    let results = await userService.updateUser(user);
+    return res.status(results.service).json({
+      errCode: results.errCode,
+      errMsg: results.errMsg,
+      user: results.user,
     });
   } catch (error) {
     return res.status(constants.serviceFail).json({
@@ -61,4 +97,6 @@ export default {
   handleLogin,
   getUserById,
   delUserById,
+  createUser,
+  updateUser,
 };
