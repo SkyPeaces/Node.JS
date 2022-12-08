@@ -11,30 +11,58 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
+        primaryKey: true,
+        validate: {
+          isEmail: true,
+          notNull: true,
+        },
       },
       password: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+        },
       },
       firstName: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+        },
       },
       lastName: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+        },
       },
       address: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+        },
       },
       gender: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+        },
       },
       roleId: {
         type: Sequelize.STRING,
       },
       phoneNumber: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+          isNumeric: true,
+          len: [4],
+        },
       },
       positionId: {
         type: Sequelize.STRING,
+        validate: {
+          notNull: true,
+        },
       },
       image: {
         type: Sequelize.STRING,

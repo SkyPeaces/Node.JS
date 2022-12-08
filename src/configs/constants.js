@@ -6,6 +6,9 @@ const constants = Object.freeze({
   errCodeException: "01",
   errMsgException: "Unhandle exception:",
 
+  errCodeExisted: "02",
+  errMsgExisted: "Data is existed.",
+
   serviceSuccess: "200",
   serviceFail: "500",
 });
