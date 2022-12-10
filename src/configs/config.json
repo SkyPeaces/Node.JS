@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "khaxqjrl_user",
-    "password": "Abc@12345",
-    "database": "khaxqjrl_db",
-    "host": "103.97.126.21",
+    "username": "bcozyaco_root",
+    "password": "Abc@12345!@#$%",
+    "database": "bcozyaco_demo",
+    "host": "103.200.23.139",
     "dialect": "mysql",
     "logging": false,
     "timezone":"+07:00",
