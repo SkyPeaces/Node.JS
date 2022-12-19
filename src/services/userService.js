@@ -24,16 +24,17 @@ let handleLogin = (user) => {
                     delete userDB.password;
                     results.user = userDB;
                 } else {
-                    results.service = constants.serviceFail;
+                    results.service = constants.serviceSuccess;
                     results.errCode = "02";
                     results.errMsg = "Wrong email address or password";
                 }
             } else {
-                results.service = constants.serviceFail;
+                results.service = constants.serviceSuccess;
                 results.errCode = "02";
                 results.errMsg = "Email address or password is not found";
             }
         } catch (error) {
+            results.service = constants.serviceFail;
             results.errCode = constants.errCodeException;
             results.errMsg = `${constants.errMsgException} ${error}`;
         }
@@ -168,7 +169,7 @@ let createUser = (data) => {
                 results.errCode = constants.errCodeSuccess;
                 results.errMsg = constants.errMsgSuccess;
             } else {
-                results.service = constants.serviceFail;
+                results.service = constants.serviceSuccess;
                 results.errCode = constants.errCodeExisted;
                 results.errMsg = constants.errMsgExisted;
             }
