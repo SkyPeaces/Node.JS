@@ -34,7 +34,7 @@ let handleLogin = (user) => {
                 results.errMsg = "Email address or password is not found";
             }
         } catch (error) {
-            results.service = constants.serviceFail;
+            results.service = constants.serviceSuccess;
             results.errCode = constants.errCodeException;
             results.errMsg = `${constants.errMsgException} ${error}`;
         }
@@ -46,7 +46,6 @@ let getUserById = (userId) => {
     return new Promise(async (resolve, reject) => {
         let results = {};
         if (userId && userId !== "undefined") {
-            console.log("userId: ", userId);
             try {
                 let userDB = await db.User.findOne({
                     attributes: { exclude: ["password"] },
@@ -60,7 +59,7 @@ let getUserById = (userId) => {
                 results.errMsg = constants.errMsgSuccess;
                 results.user = userDB ? userDB : {};
             } catch (error) {
-                results.service = constants.serviceFail;
+                results.service = constants.serviceSuccess;
                 results.errCode = constants.errCodeException;
                 results.errMsg = `${constants.errMsgException} ${error}`;
             }
@@ -75,71 +74,10 @@ let getUserById = (userId) => {
                 results.errMsg = constants.errMsgSuccess;
                 results.user = userDB ? userDB : {};
             } catch (error) {
-                results.service = constants.serviceFail;
-                results.errCode = constants.errCodeException;
-                results.errMsg = `${constants.errMsgException} ${error}`;
-            }
-        }
-        resolve(results);
-    });
-};
-
-let delUserById = (userId) => {
-    return new Promise(async (resolve, reject) => {
-        let results = {};
-        if (userId) {
-            try {
-                await db.User.destroy({
-                    where: {
-                        id: userId,
-                    },
-                    raw: true,
-                });
                 results.service = constants.serviceSuccess;
-                results.errCode = constants.errCodeSuccess;
-                results.errMsg = constants.errMsgSuccess;
-            } catch (error) {
-                results.service = constants.serviceFail;
                 results.errCode = constants.errCodeException;
                 results.errMsg = `${constants.errMsgException} ${error}`;
             }
-        } else {
-            results.service = constants.serviceFail;
-            results.errCode = constants.errCodeException;
-            results.errMsg = `${constants.errMsgException} ${error}`;
-        }
-        resolve(results);
-    });
-};
-
-let updateUser = (data) => {
-    return new Promise(async (resolve, reject) => {
-        let results = {};
-        try {
-            await db.User.update(
-                {
-                    email: data.email,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    address: data.address,
-                    gender: data.sex,
-                    roleId: data.roleId,
-                    phoneNumber: data.phoneNumber,
-                    positionId: data.positionId,
-                },
-                {
-                    where: {
-                        id: data.id,
-                    },
-                }
-            );
-            results.service = constants.serviceSuccess;
-            results.errCode = constants.errCodeSuccess;
-            results.errMsg = constants.errMsgSuccess;
-        } catch (error) {
-            results.service = constants.serviceFail;
-            results.errCode = constants.errCodeException;
-            results.errMsg = `${constants.errMsgException} ${error}`;
         }
         resolve(results);
     });
@@ -174,7 +112,81 @@ let createUser = (data) => {
                 results.errMsg = constants.errMsgExisted;
             }
         } catch (error) {
-            results.service = constants.serviceFail;
+            results.service = constants.serviceSuccess;
+            results.errCode = constants.errCodeException;
+            results.errMsg = `${constants.errMsgException} ${error}`;
+        }
+        resolve(results);
+    });
+};
+
+let delUserById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        let results = {};
+        if (userId) {
+            try {
+                const res = await db.User.findByPk(userId);
+                if (res === null) {
+                    results.service = constants.serviceSuccess;
+                    results.errCode = constants.errCodeNotExisted;
+                    results.errMsg = constants.errMsgNotExisted;
+                } else {
+                    try {
+                        await db.User.destroy({
+                            where: {
+                                id: userId,
+                            },
+                            raw: true,
+                        });
+                        results.service = constants.serviceSuccess;
+                        results.errCode = constants.errCodeSuccess;
+                        results.errMsg = constants.errMsgSuccess;
+                    } catch (error) {
+                        results.service = constants.serviceSuccess;
+                        results.errCode = constants.errCodeException;
+                        results.errMsg = `${constants.errMsgException} ${error}`;
+                    }
+                }
+            } catch (error) {
+                results.service = constants.serviceSuccess;
+                results.errCode = constants.errCodeException;
+                results.errMsg = `${constants.errMsgException} ${error}`;
+            }
+        } else {
+            results.service = constants.serviceSuccess;
+            results.errCode = constants.errCodeException;
+            results.errMsg = `${constants.errMsgException} ${error}`;
+        }
+        resolve(results);
+    });
+};
+
+let updateUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        let results = {};
+        try {
+            await db.User.update(
+                {
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    gender: data.sex,
+                    roleId: data.roleId,
+                    phoneNumber: data.phoneNumber,
+                    positionId: data.positionId,
+                },
+                {
+                    where: {
+                        id: data.id,
+                    },
+                }
+            );
+            results.service = constants.serviceSuccess;
+            results.errCode = constants.errCodeSuccess;
+            results.errMsg = constants.errMsgSuccess;
+        } catch (error) {
+            results.service = constants.serviceSuccess;
             results.errCode = constants.errCodeException;
             results.errMsg = `${constants.errMsgException} ${error}`;
         }
