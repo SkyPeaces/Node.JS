@@ -20,10 +20,10 @@
     "query":{"raw":true}
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "node.js",
-    "host": "127.0.0.1",
+    "username": "bcozyaco_root",
+    "password": "U38DRCYXXEEJ",
+    "database": "bcozyaco_demo",
+    "host": "103.200.23.139",
     "dialect": "mysql",
     "logging": false,
     "timezone":"+07:00",
