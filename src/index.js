@@ -2,7 +2,7 @@ import express from "express";
 import configViewEngine from "./configs/viewEngine";
 import initWebRoute from "./routes/web";
 import db from "./models/index";
-import cors from "cors";
+// import cors from "cors";
 
 require("dotenv").config();
 

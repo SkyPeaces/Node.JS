@@ -48,17 +48,17 @@ let getUserById = (userId) => {
         let results = {};
         if (userId && userId !== "undefined") {
             try {
-                // let userDB = await db.User.findOne({
-                //     attributes: { exclude: ["password"] },
-                //     where: {
-                //         id: userId,
-                //     },
-                //     raw: true,
-                // });
-                let userDB = await dbA.sequelize.query(`SELECT t1.*, @RankRow := @RankRow+ 1 AS rank FROM users t1 JOIN (SELECT @RankRow := 0) r WHERE t1.id = ${userId}`, {
-                    model: db.User,
-                    mapToModel: true,
+                let userDB = await db.User.findOne({
+                    attributes: { exclude: ["password"] },
+                    where: {
+                        id: userId,
+                    },
+                    raw: true,
                 });
+                // let userDB = await dbA.sequelize.query(`SELECT t1.*, @RankRow := @RankRow+ 1 AS rank FROM users t1 JOIN (SELECT @RankRow := 0) r WHERE t1.id = ${userId}`, {
+                //     model: db.User,
+                //     mapToModel: true,
+                // });
                 results.service = constants.serviceSuccess;
                 results.errCode = constants.errCodeSuccess;
                 results.errMsg = constants.errMsgSuccess;
@@ -70,14 +70,14 @@ let getUserById = (userId) => {
             }
         } else {
             try {
-                // let userDB = await db.User.findAll({
-                //     attributes: { exclude: ["password"] },
-                //     raw: true,
-                // });
-                let userDB = await dbA.sequelize.query(`SELECT t1.*, @RankRow := @RankRow+ 1 AS rank FROM users t1 JOIN (SELECT @RankRow := 0) r`, {
-                    model: db.User,
-                    mapToModel: true,
+                let userDB = await db.User.findAll({
+                    attributes: { exclude: ["password"] },
+                    raw: true,
                 });
+                // let userDB = await dbA.sequelize.query(`SELECT t1.*, @RankRow := @RankRow+ 1 AS rank FROM users t1 JOIN (SELECT @RankRow := 0) r`, {
+                //     model: db.User,
+                //     mapToModel: true,
+                // });
                 results.service = constants.serviceSuccess;
                 results.errCode = constants.errCodeSuccess;
                 results.errMsg = constants.errMsgSuccess;
