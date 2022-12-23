@@ -1,4 +1,5 @@
 import express from "express";
+import auth from "../middleware/auth";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
 
@@ -13,6 +14,9 @@ const initWebRoute = (app) => {
     router.get("/deleteUser/:id", homeController.deleteUser);
 
     router.post("/api/login", userController.handleLogin);
+
+    router.use(auth.verifyToken);
+
     router.get("/api/get-user", userController.getUserById);
     router.delete("/api/delete-user", userController.delUserById);
     router.put("/api/update-user", userController.updateUser);

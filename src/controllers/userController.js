@@ -15,12 +15,15 @@ let handleLogin = async (req, res) => {
         return res.status(results.service).json({
             errCode: results.errCode,
             errMsg: results.errMsg,
+            isLoggedIn: results.isLoggedIn,
+            accessToken: results.accessToken,
+            refreshToken: results.refreshToken,
             user: results.user,
         });
     } catch (error) {
         return res.status(constants.serviceFail).json({
             errCode: constants.errCodeException,
-            errMsg: `${constants.errMsgException} ${error}`,
+            errMsg: `handleLogin ${constants.errMsgException} ${error}`,
         });
     }
 };
@@ -37,7 +40,7 @@ let getUserById = async (req, res) => {
     } catch (error) {
         return res.status(constants.serviceFail).json({
             errCode: constants.errCodeException,
-            errMsg: `${constants.errMsgException} ${error}`,
+            errMsg: `getUserById ${constants.errMsgException} ${error}`,
         });
     }
 };

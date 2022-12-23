@@ -1,27 +1,50 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import constants from "../configs/constants";
-import dbA from "../models";
+import authMethod from "../middleware/auth";
+import randToken from "rand-token";
 
 let salt = bcrypt.genSaltSync(10);
 
-let handleLogin = (user) => {
+let handleLogin = (_user) => {
     return new Promise(async (resolve, reject) => {
         // console.log(`email: ${user.email}, password: ${user.password}`);
         let results = {};
         try {
             let userDB = await db.User.findOne({
                 where: {
-                    email: user.email,
+                    email: _user.email,
                 },
-                raw: true,
             });
             if (userDB) {
-                let check = await bcrypt.compareSync(user.password, userDB.password);
-                if (check) {
+                let check = await bcrypt.compareSync(_user.password, userDB.password);
+                const accessToken = await authMethod.generateToken({ username: _user.email });
+                if (check && accessToken) {
+                    // if (!accessToken) {
+                    //     return res.status(401).send("Đăng nhập không thành công, vui lòng thử lại.");
+                    // }
+                    let refreshToken = randToken.generate(100); // tạo 1 refresh token ngẫu nhiên
+                    // if (!user.refreshToken) {
+                    //     // Nếu user này chưa có refresh token thì lưu refresh token đó vào database
+                    //     await userModel.updateRefreshToken(user.username, refreshToken);
+                    // } else {
+                    //     // Nếu user này đã có refresh token thì lấy refresh token đó từ database
+                    //     refreshToken = user.refreshToken;
+                    // }
+
+                    // return res.json({
+                    //     msg: "Đăng nhập thành công.",
+                    //     accessToken,
+                    //     refreshToken,
+                    //     user,
+                    // });
+
                     results.service = constants.serviceSuccess;
                     results.errCode = constants.errCodeSuccess;
                     results.errMsg = constants.errMsgSuccess;
+                    results.isLoggedIn = true;
+                    results.accessToken = accessToken;
+                    results.refreshToken = refreshToken;
                     delete userDB.password;
                     results.user = userDB;
                 } else {
