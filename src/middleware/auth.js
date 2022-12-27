@@ -1,4 +1,5 @@
 import * as jwt from "jsonwebtoken";
+import constants from "../configs/constants";
 
 const promisify = require("util").promisify;
 const sign = promisify(jwt.sign).bind(jwt);
@@ -7,20 +8,22 @@ const verify = promisify(jwt.verify).bind(jwt);
 require("dotenv").config();
 const config = process.env;
 
+const refreshToken = async (req, res, next) => {};
+
 const verifyToken = async (req, res, next) => {
     const token = req.body.token || req.query.token || req.headers["x-access-token"];
-
-    if (!token) {
-        return res.status(403).send("A token is required for authentication");
-    }
+    // const token = req.cookies.accessToken;
 
     try {
         const decoded = await verify(token, config.ACCESS_TOKEN_SECRET);
         req.jwtDecoded = decoded;
     } catch (err) {
-        return res.status(401).send("Invalid Token");
+        return res.status("401").json({
+            errCode: constants.errCodeTokenExpired,
+            errMsg: constants.errMsgTokenExpired,
+            isLoggedIn: false,
+        });
     }
-
     return next();
 };
 
@@ -45,4 +48,5 @@ const generateToken = async (payload) => {
 export default {
     verifyToken,
     generateToken,
+    refreshToken,
 };

@@ -3,12 +3,15 @@ import configViewEngine from "./configs/viewEngine";
 import initWebRoute from "./routes/web";
 import db from "./models/index";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT;
 
+app.use(express.json());
+app.use(cookieParser());
 // app.use(function (req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -22,7 +25,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 configViewEngine(app);
 initWebRoute(app);

@@ -20,10 +20,11 @@ let handleLogin = (_user) => {
                 let check = await bcrypt.compareSync(_user.password, userDB.password);
                 const accessToken = await authMethod.generateToken({ username: _user.email });
                 if (check && accessToken) {
+                    // await authMethod.generateToken({ username: _user.email });
                     // if (!accessToken) {
                     //     return res.status(401).send("Đăng nhập không thành công, vui lòng thử lại.");
                     // }
-                    let refreshToken = randToken.generate(100); // tạo 1 refresh token ngẫu nhiên
+                    // let refreshToken = randToken.generate(100); // tạo 1 refresh token ngẫu nhiên
                     // if (!user.refreshToken) {
                     //     // Nếu user này chưa có refresh token thì lưu refresh token đó vào database
                     //     await userModel.updateRefreshToken(user.username, refreshToken);
@@ -44,7 +45,6 @@ let handleLogin = (_user) => {
                     results.errMsg = constants.errMsgSuccess;
                     results.isLoggedIn = true;
                     results.accessToken = accessToken;
-                    results.refreshToken = refreshToken;
                     delete userDB.password;
                     results.user = userDB;
                 } else {

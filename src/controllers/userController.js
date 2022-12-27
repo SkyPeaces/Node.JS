@@ -12,6 +12,11 @@ let handleLogin = async (req, res) => {
     }
     try {
         let results = await userService.handleLogin(req.body);
+        // res.cookie("accessToken", results.accessToken, {
+        //     maxAge: 356 * 24 * 60 * 60 * 100,
+        //     httpOnly: true,
+        //     // secure: true,
+        // });
         return res.status(results.service).json({
             errCode: results.errCode,
             errMsg: results.errMsg,

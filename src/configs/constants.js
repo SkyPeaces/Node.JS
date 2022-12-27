@@ -12,6 +12,9 @@ const constants = Object.freeze({
     errCodeNotExisted: "03",
     errMsgNotExisted: "Data is not existed.",
 
+    errCodeTokenExpired: "04",
+    errMsgTokenExpired: "Token expired",
+
     serviceSuccess: "200",
     serviceFail: "500",
 });
